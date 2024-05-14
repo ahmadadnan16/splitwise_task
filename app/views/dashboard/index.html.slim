@@ -1,0 +1,114 @@
+.dashboard-wrapper
+  aside.side-bar-area
+    .friends-list
+      p.friends-list-header FRIENDS
+      ul
+        - @users.each do |user|
+          li
+            = link_to user.name, user_path(user), class: "friend-link"
+  .main-area
+    .top-bar
+      h1.top-bar-title Dashboard
+      .top-bar-actions
+        button.btn.btn-primary type="button" data-bs-toggle="modal" data-bs-target="#expenseModal"  Add an expense
+        button.btn.btn-secondary type="button"  Settle up
+
+    .dashboard-balances
+      .balances-bar
+        .balance-block
+          p total balance
+          p = @total_balance
+        .balance-block
+          p you owe
+          p = @total_you_owe
+        .balance-block
+          p you are owed
+          p = @total_you_are_owed
+      .dashboard-detail
+        .detail-block
+          h2.detail-title Friends You Owe
+          - if @friends_you_owe.is_a?(String)
+            p= @friends_you_owe
+          - else
+            - @friends_you_owe.each do |friend, amount|
+              .user-detail
+                img.user-img alt="profile" src="https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png"
+                .user-info
+                  p = User.find(friend).name
+                  p owes you #{amount}
+        .detail-block
+          h2.detail-title Friends Who Owe You
+          - if @friends_who_owe_you.is_a?(String)
+            p= @friends_who_owe_you
+          - else
+            - @friends_who_owe_you.each do |friend, amount|
+              .user-detail
+                img.user-img alt="profile" src="https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png"
+                .user-info
+                  p = User.find(friend).name
+                  p owes you #{amount}
+
+#expenseModal.modal.fade aria-hidden="true" aria-labelledby="expenseModalLabel" tabindex="-1"
+  .modal-dialog
+    .modal-content
+      .modal-header
+        h5#expenseModalLabel.modal-title Add an expense
+        button.btn-close aria-label="Close" data-bs-dismiss="modal" type="button"
+      .modal-body
+        = form_with(model: @expense, url: expenses_path, local: true, html: { id: 'expenseForm' }) do |form|
+          - if @expense&.errors&.any?
+            .alert.alert-danger
+              ul
+                - @expense.errors.full_messages.each do |message|
+                  li = message
+
+          .mb-3
+            = form.label :description, class: "form-label"
+            = form.text_field :description, class: "form-control"
+
+          .mb-3
+            = form.label :amount, class: "form-label"
+            = form.text_field :amount, class: "form-control"
+
+          .mb-3
+            = form.label :tax_amount, class: "form-label"
+            = form.text_field :tax_amount, class: "form-control"
+
+          .mb-3
+            = form.label :date, class: "form-label"
+            = form.date_field :date, class: "form-control"
+
+          .mb-3
+            = form.label :user_id
+            = form.collection_select :user_id, User.all, :id, :name, {}, { class: "form-control" }
+
+          hr
+          h2 Add Expense Items
+          #expense_items
+            = form.fields_for :expense_items do |expense_item_form|
+              .expense-item-fields.mb-3
+                .row.g-3.align-items-center
+                  .col-md-3
+                    = expense_item_form.label :description, class: "form-label"
+                    = expense_item_form.text_field :description, class: "form-control"
+                  .col-md-3
+                    = expense_item_form.label :amount, class: "form-label"
+                    = expense_item_form.text_field :amount, class: "form-control"
+                  .col-md-3
+                    = expense_item_form.check_box :is_shareable, class: "form-check-input"
+                    = expense_item_form.label :is_shareable, class: "form-label"
+                  .col-md-12
+                    .user-selection#user-selection
+                      = expense_item_form.label :user_id
+                      = expense_item_form.collection_select :user_id, User.all, :id, :name, {}, { class: "form-control" }
+
+          hr
+          h2 Select Participants
+          = form.collection_check_boxes :expense_participants_ids, User.all, :id, :name do |user|
+            .form-check
+              = user.check_box(class: "form-check-input")
+              = user.label(class: "form-check-label")
+              
+      .modal-footer
+        button.btn.btn-secondary data-bs-dismiss="modal" type="button" Close
+        button.btn.btn-primary#addExpenseButton type="submit" Save changes

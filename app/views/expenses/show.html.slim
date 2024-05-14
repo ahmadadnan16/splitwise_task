@@ -1,0 +1,29 @@
+h1 Expense Details
+p
+  | <strong>Expense Desciption:</strong> #{@expense.description}
+p
+  | <strong>Expense Amount:</strong> #{@expense.amount}
+p
+  | <strong>Tax Amount:</strong> #{@expense.tax_amount}
+p
+  | <strong>Expense Paid by:</strong> #{@expense.user.name}
+
+h2 Expense Items
+ul
+  - @expense.expense_items.each do |item|
+    li
+      | <strong>Description:</strong> #{item.description}
+      | , <strong>Amount:</strong> #{item.amount}
+      | , <strong>Shared:</strong> #{item.is_shareable ? "Yes" : "No"}
+      - if item.is_shareable
+        li
+          | <strong>Name:</strong> #{item.user.name}
+
+h2 Participants
+ul
+  - @expense.expense_participants.each do |participant|
+    li
+      | <strong>Name:</strong> #{participant.user.name}
+      | , <strong>Owed Amount:</strong> #{participant.owed_amount}
+
+= link_to "Back", root_path
