@@ -1,36 +1,32 @@
-# Rails Assignment - Splitwise
+ # Splitwise Application
 
-## Setup
-- Fork the repository. 
-- Clone the repository in your local machine.
-- Run `rails db:setup`, this will also seed data in the `User` model
-- Run `rails s` to start the server and `rails c` for rails console
+This repository contains the codebase for a Splitwise-like application built with Ruby on Rails. The application enables users to track expenses among friends, allowing them to share bills, view their own expenses, and see expenses of their friends.
 
-## Requirements
+## Getting Started
 
-- Ruby - 2.6.3
-- Rails - 6.1.4
-- Git (configured with your Github account)
-- Node - 12.13.1
+To get started with the application, follow these steps:
 
-
-## Things available in the repo
-- Webpacker configured and following packages are added and working.
-  - Jquery
-  - Bootstrap
-  - Jgrowl
-- Devise installed and `User` model is added. Sign in and Sign up pages have been setup.
-- Routes and layouts for following page have been added.
-  - Dashboard - This will be the root page.
-  - Friend page - `/people/:id`
+1. Clone the repository to your local machine:
+   git clone https://github.com/ahmadadnan16/splitwise_task
+2. Install dependencies: bundle install
+3. set up databse: rails db:setup
+4. run server: rails s
 
 
-## Submission
-- Make the improvements as specified in your technical assignment task.
-- Commit all changes to the fork you created
-- Deploy your app to Heroku
-- Send us the link of the dpeloyed application and your fork.
+## Basic Functionality
 
+The application consists of three main sections:
 
-## Contact us
-If you need any help regarding this assignment or want to join [Commutatus](https://www.commutatus.com/), drop us an email at work@commutatus.com 
+1. **Sharing the Expense - Itemized Bill**
+- Allows users to register expenses, specifying the total amount spent, the users involved, and how the amount is divided.
+- Each item in the bill can be assigned to a specific person or split equally among all users.
+- Tax can be added to the total amount, which is then evenly split among all users.
+
+2. **Dashboard - Listing My Expenses**
+- Provides users with an overview of their expenses.
+- Displays the total balance, total amount owed by the user, and total amount owed to the user.
+- Lists friends whom the user owes and the amount owed, as well as friends who owe the user and the amount owed.
+
+3. **List Friend Expenses**
+- Allows users to view expenses made by their friends.
+- Each expense record includes the date, description of the expense, who paid for it, and whether the user has borrowed or lent money.
